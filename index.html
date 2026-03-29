@@ -1544,6 +1544,18 @@ function dismissOnboarding() {
     document.body.classList.remove('ob-active');
     document.body.classList.add('ob-reveal');
     animateLogoLetters();
+
+    // Step 3: after bubble animations complete, clear residual transforms
+    // iOS breaks iframe touch-scroll when a parent has any transform (even identity)
+    const mwin = document.querySelector('.mwin');
+    if (mwin) {
+      mwin.addEventListener('animationend', () => {
+        mwin.style.animation = 'none';
+        mwin.style.opacity = '1';
+        mwin.style.transform = 'none';
+        document.body.classList.remove('ob-reveal');
+      }, { once: true });
+    }
   }, 500);
   localStorage.setItem('ob-seen', '1');
 }
