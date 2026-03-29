@@ -1068,15 +1068,20 @@ nav{
     width:min(80vw,calc((100vh - 140px) * 16 / 9));
   }
   #logo{
-    top:10px;right:14px;
+    top:10px;right:8px;
     font-size:14px;
+    display:flex;flex-direction:column;align-items:flex-end;
+    line-height:1;
   }
   nav{
-    left:calc((100vw - min(80vw,calc((100vh - 140px) * 16 / 9))) / 4);
+    left:0;
+    width:10vw;
+    align-items:center;
     gap:18px;
   }
   .nav-link{
     font-size:10px;
+    padding-left:14px;
   }
 }
 
