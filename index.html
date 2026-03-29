@@ -1119,7 +1119,7 @@ nav{
   .proj-slide{aspect-ratio:auto;height:auto;display:none!important;position:relative}
   .proj-slide.active{display:block!important}
   .proj-placeholder{position:relative;aspect-ratio:4/3}
-  .proj-iframe{position:relative;aspect-ratio:4/3;width:100%;height:auto;overflow:auto;-webkit-overflow-scrolling:touch}
+  .proj-iframe{position:relative;aspect-ratio:4/3;width:100%;height:auto;overflow:hidden}
   .slide-loader{position:absolute;inset:0;aspect-ratio:auto}
 
   /* Show mobile elements */
@@ -1896,20 +1896,10 @@ function goToProject(index) {
     iframe.src = iframe.dataset.src;
   }
 
-  // Keep only 2 most recent iframes in memory — unload others
+  // Track recent projects (no unloading — causes scroll issues on mobile)
   const recentIdx = recentProjects.indexOf(index);
   if (recentIdx !== -1) recentProjects.splice(recentIdx, 1);
   recentProjects.unshift(index);
-  if (recentProjects.length > 2) {
-    const toUnload = recentProjects.splice(2); // keep first 2, get the rest
-    toUnload.forEach(i => {
-      const oldIframe = slides[i]?.querySelector('.proj-iframe[data-src]');
-      if (oldIframe && oldIframe.getAttribute('src')) {
-        oldIframe.removeAttribute('src');
-        loadedSlides.delete(i);
-      }
-    });
-  }
 
   // Update mobile info
   updateMobileInfo(index);
