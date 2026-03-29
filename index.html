@@ -1062,6 +1062,25 @@ nav{
 .mob-sheet-content .case-meta{gap:16px}
 .mob-sheet-content .case-features{grid-template-columns:1fr}
 
+/* ── Tablet (901–1200px) ─────────────────────────────── */
+@media(max-width:1200px) and (min-width:901px){
+  #logo{
+    top:12px;right:16px;
+    font-size:17px;
+  }
+  nav{
+    left:14px;
+    gap:18px;
+  }
+  .nav-link{
+    font-size:10px;
+    padding-left:12px;
+  }
+  .mwin{
+    width:min(72vw,calc((100vh - 120px) * 16 / 9));
+  }
+}
+
 /* ── Responsive ───────────────────────────────────────── */
 @media(max-width:900px){
   /* Hide desktop-only elements */
