@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /sites/
+
+Sitemap: https://nathanleray.com/sitemap.xml
