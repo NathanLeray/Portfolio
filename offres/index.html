@@ -53,6 +53,19 @@ h1{font-size:clamp(32px,4vw,52px);font-weight:800;line-height:1.1;margin-bottom:
 .card--feat .card-cta{background:var(--ink);color:#fff}
 .card--feat .card-cta:hover{background:#333}
 
+/* Process steps */
+.process{max-width:1100px;margin:64px auto;padding:0 20px}
+.process h2{font-size:clamp(24px,3vw,36px);font-weight:800;text-align:center;margin-bottom:8px}
+.process-sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:48px}
+.process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;position:relative}
+@media(max-width:900px){.process-grid{grid-template-columns:repeat(2,1fr);gap:24px}}
+@media(max-width:520px){.process-grid{grid-template-columns:1fr}}
+.process-step{position:relative;padding:24px 20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.process-step:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.process-num{font-family:var(--font);font-weight:800;font-size:36px;color:rgba(0,0,0,.08);line-height:1;margin-bottom:12px}
+.process-name{font-size:14px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.process-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
 /* Tableau comparatif */
 .compare{max-width:1100px;margin:0 auto}
 .compare h2{font-size:clamp(24px,3vw,36px);font-weight:800;text-align:center;margin-bottom:32px}
@@ -70,6 +83,7 @@ h1{font-size:clamp(32px,4vw,52px);font-weight:800;line-height:1.1;margin-bottom:
 .footer a{color:var(--muted);transition:color .3s}
 .footer a:hover{color:var(--ink)}
 </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://nathanleray.com/"},{"@type":"ListItem","position":2,"name":"Tarifs","item":"https://nathanleray.com/offres/"}]}</script>
 </head>
 <body>
 <a href="/" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Retour au portfolio</a>
@@ -130,6 +144,38 @@ h1{font-size:clamp(32px,4vw,52px);font-weight:800;line-height:1.1;margin-bottom:
     <a href="/#contact" class="card-cta">Pr&eacute;parer l'&eacute;change &rarr;</a>
   </div>
 </div>
+
+<section class="process">
+  <h2>Comment on travaille ensemble</h2>
+  <p class="process-sub">Une m&eacute;thode claire en 5 &eacute;tapes, du premier &eacute;change &agrave; la mise en ligne.</p>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="process-num">01</div>
+      <div class="process-name">&Eacute;change d&eacute;couverte</div>
+      <div class="process-desc">On discute de votre projet, vos objectifs et votre vision. Gratuit et sans engagement.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">02</div>
+      <div class="process-name">Devis &amp; brief</div>
+      <div class="process-desc">Je vous envoie un devis pr&eacute;cis et on d&eacute;finit ensemble le contenu et le style.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">03</div>
+      <div class="process-name">Maquettes</div>
+      <div class="process-desc">Je vous pr&eacute;sente le design propos&eacute;. On ajuste jusqu'&agrave; ce que tout vous plaise.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">04</div>
+      <div class="process-name">D&eacute;veloppement</div>
+      <div class="process-desc">Je code votre site sur mesure. Vous suivez l'avancement avec des points r&eacute;guliers.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">05</div>
+      <div class="process-name">Mise en ligne</div>
+      <div class="process-desc">Je publie le site, vous le testez, et je vous forme &agrave; le g&eacute;rer en autonomie.</div>
+    </div>
+  </div>
+</section>
 
 <div class="compare">
   <h2>Comparatif d&eacute;taill&eacute;</h2>

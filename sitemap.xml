@@ -8,7 +8,47 @@
   <url>
     <loc>https://nathanleray.com/offres/</loc>
     <lastmod>2026-04-02</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/projets/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/projets/seve-restaurant/</loc>
+    <lastmod>2026-04-02</lastmod>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/projets/aube-fleurie/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/projets/studio-orme/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/blog/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/blog/combien-coute-un-site-web/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/blog/site-sur-mesure-vs-wordpress/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nathanleray.com/blog/comment-choisir-createur-site/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://nathanleray.com/creatif/</loc>

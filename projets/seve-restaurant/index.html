@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S&egrave;ve Restaurant — &Eacute;tude de cas | Nathan Leray</title>
+<meta name="description" content="Cr&eacute;ation du site vitrine du restaurant gastronomique S&egrave;ve &agrave; Barbizon. Design immersif, ambiance sombre et dor&eacute;e, navigation soign&eacute;e.">
+<link rel="canonical" href="https://nathanleray.com/projets/seve-restaurant/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="S&egrave;ve Restaurant — &Eacute;tude de cas">
+<meta property="og:description" content="Cr&eacute;ation d'un site vitrine gastronomique. Design immersif, ambiance sombre et dor&eacute;e.">
+<meta property="og:url" content="https://nathanleray.com/projets/seve-restaurant/">
+<meta property="og:image" content="https://nathanleray.com/screenshots/seve.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nathanleray.com/screenshots/seve.webp">
+<meta name="author" content="Nathan Leray">
+<meta name="theme-color" content="#F5F2EC">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-size='78' font-family='system-ui,sans-serif' font-weight='800' fill='%230C0C0C'>N</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F2EC;--surface:#FFFFFF;--ink:#0C0C0C;--secondary:#3A3A3A;--muted:#6B6B6B;--ghost:#A0A0A0;--border:rgba(0,0,0,.08);--font:'Manrope',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);font-weight:400;font-size:15px;line-height:1.7;color:var(--ink);background:var(--bg)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:var(--ink);color:var(--bg)}
+.container{max-width:980px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:32px 0;transition:color .3s}
+.back:hover{color:var(--ink)}
+.back svg{width:14px;height:14px}
+.tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ghost);margin-bottom:14px}
+h1{font-size:clamp(36px,6vw,68px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:18px}
+.lead{font-size:clamp(16px,1.4vw,19px);color:var(--secondary);max-width:720px;line-height:1.7;margin-bottom:28px}
+.demo-badge{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost);border:1px solid var(--border);padding:4px 12px;border-radius:99px;margin-bottom:24px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:48px}
+.meta-item-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost);margin-bottom:4px}
+.meta-item-value{font-size:14px;color:var(--ink);font-weight:500}
+.hero-img{width:100%;height:auto;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.08);margin-bottom:64px;display:block}
+.section{margin-bottom:48px}
+.section h2{font-size:clamp(22px,2.5vw,30px);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
+.section p{font-size:15px;color:var(--secondary);line-height:1.8;max-width:720px}
+.features{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px;max-width:720px}
+@media(max-width:640px){.features{grid-template-columns:1fr}}
+.feature{padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.feature-name{font-weight:700;font-size:14px;margin-bottom:4px}
+.feature-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.tech{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tech-tag{font-size:11px;font-weight:500;color:var(--secondary);padding:6px 14px;border:1px solid var(--border);border-radius:99px;background:var(--surface)}
+.cta-block{padding:48px clamp(28px,5vw,56px);background:var(--ink);color:#fff;border-radius:16px;margin:64px 0;text-align:center}
+.cta-block h2{font-size:clamp(22px,3vw,32px);font-weight:800;margin-bottom:10px}
+.cta-block p{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:99px;border:none;cursor:pointer;transition:all .35s var(--ease);text-decoration:none}
+.btn svg{width:12px;height:12px}
+.btn-primary{background:#fff;color:var(--ink)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,255,255,.15)}
+.btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn-outline:hover{border-color:#fff}
+.footer{padding:32px 0 48px;text-align:center;font-size:11px;color:var(--ghost);border-top:1px solid var(--border);margin-top:32px}
+.footer a{color:var(--muted);transition:color .3s}
+.footer a:hover{color:var(--ink)}
+.footer-links{margin-top:8px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://nathanleray.com/"},{"@type":"ListItem","position":2,"name":"Projets","item":"https://nathanleray.com/projets/"},{"@type":"ListItem","position":3,"name":"S&egrave;ve Restaurant","item":"https://nathanleray.com/projets/seve-restaurant/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"S&egrave;ve Restaurant","description":"Site vitrine pour un restaurant gastronomique &agrave; Barbizon. Design immersif, ambiance sombre et dor&eacute;e.","creator":{"@type":"Person","name":"Nathan Leray","url":"https://nathanleray.com"},"dateCreated":"2024","image":"https://nathanleray.com/screenshots/seve.webp","keywords":"site vitrine, restaurant, gastronomie, design web, HTML CSS JavaScript"}</script>
+</head>
+<body>
+
+<div class="container">
+  <a href="/" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Retour aux projets</a>
+
+  <p class="tag">&Eacute;tude de cas &mdash; 2024</p>
+  <h1>S&egrave;ve Restaurant</h1>
+  <p class="lead">Cr&eacute;ation d'un site vitrine pour un restaurant gastronomique &agrave; Barbizon. Une exp&eacute;rience web pens&eacute;e pour transmettre l'atmosph&egrave;re intime et raffin&eacute;e du lieu.</p>
+  <span class="demo-badge">Projet de d&eacute;monstration</span>
+
+  <div class="meta">
+    <div><div class="meta-item-label">Client</div><div class="meta-item-value">S&egrave;ve &mdash; Barbizon</div></div>
+    <div><div class="meta-item-label">R&ocirc;le</div><div class="meta-item-value">Design &amp; D&eacute;veloppement</div></div>
+    <div><div class="meta-item-label">Dur&eacute;e</div><div class="meta-item-value">3 semaines</div></div>
+    <div><div class="meta-item-label">Ann&eacute;e</div><div class="meta-item-value">2024</div></div>
+  </div>
+
+  <img src="/screenshots/seve.webp" alt="Capture d'&eacute;cran du site S&egrave;ve Restaurant" width="1200" height="750" class="hero-img" loading="eager">
+
+  <div class="section">
+    <h2>Le contexte</h2>
+    <p>S&egrave;ve est un restaurant gastronomique situ&eacute; &agrave; Barbizon, en &Icirc;le-de-France. L'objectif &eacute;tait de cr&eacute;er une identit&eacute; num&eacute;rique &agrave; la hauteur de l'exp&eacute;rience propos&eacute;e en salle&nbsp;: intime, raffin&eacute;e et m&eacute;morable. Le site devait transmettre l'ambiance des soir&eacute;es &agrave; la bougie et donner envie de r&eacute;server d&egrave;s la premi&egrave;re visite.</p>
+  </div>
+
+  <div class="section">
+    <h2>L'approche</h2>
+    <p>J'ai opt&eacute; pour une direction artistique sombre et dor&eacute;e, inspir&eacute;e directement de l'atmosph&egrave;re du restaurant. Une typographie serif &eacute;l&eacute;gante, des animations subtiles et une navigation immersive&nbsp;: chaque d&eacute;tail visuel a &eacute;t&eacute; pens&eacute; pour cr&eacute;er une exp&eacute;rience &agrave; la hauteur de la cuisine servie.</p>
+    <p>D&eacute;veloppement 100% vanilla HTML, CSS et JavaScript, sans framework, pour une performance optimale et une maintenance simple.</p>
+  </div>
+
+  <div class="section">
+    <h2>Les fonctionnalit&eacute;s</h2>
+    <div class="features">
+      <div class="feature"><div class="feature-name">Navigation immersive</div><div class="feature-desc">Menu plein &eacute;cran avec animations fluides et transitions soign&eacute;es.</div></div>
+      <div class="feature"><div class="feature-name">5 pages distinctes</div><div class="feature-desc">Accueil, menu, le chef, galerie, r&eacute;servation &mdash; chacune avec son identit&eacute;.</div></div>
+      <div class="feature"><div class="feature-name">Design responsive</div><div class="feature-desc">Adaptation compl&egrave;te mobile, tablette et desktop sans compromis visuel.</div></div>
+      <div class="feature"><div class="feature-name">Performance</div><div class="feature-desc">Chargement optimis&eacute;, images lazy-loaded, animations GPU-accelerated.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Le r&eacute;sultat</h2>
+    <p>Un site qui capture l'essence du restaurant&nbsp;: &eacute;l&eacute;gant, immersif et performant. Le design sombre et dor&eacute; cr&eacute;e une atmosph&egrave;re unique qui se distingue radicalement des sites de restauration classiques. Les visiteurs ressentent l'ambiance du lieu d&egrave;s les premi&egrave;res secondes.</p>
+    <div class="tech">
+      <span class="tech-tag">HTML / CSS</span>
+      <span class="tech-tag">JavaScript vanilla</span>
+      <span class="tech-tag">Design</span>
+      <span class="tech-tag">Multi-pages</span>
+      <span class="tech-tag">Responsive</span>
+    </div>
+  </div>
+
+  <div class="cta-block">
+    <h2>Envie d'un site comme celui-ci&nbsp;?</h2>
+    <p>Discutons de votre projet. Devis gratuit et r&eacute;ponse sous 24h.</p>
+    <div class="cta-actions">
+      <a href="/sites/seve/index.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Voir le site en direct <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+      <a href="/#contact" class="btn btn-outline">Me contacter</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2026 Nathan Leray</p>
+    <div class="footer-links">
+      <a href="/">Portfolio</a>
+      <a href="/offres/">Tarifs</a>
+      <a href="/mentions-legales/">Mentions l&eacute;gales</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
