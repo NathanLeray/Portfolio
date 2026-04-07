@@ -23,6 +23,8 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-size='78' font-family='system-ui,sans-serif' font-weight='800' fill='%230C0C0C'>N</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://esm.sh" crossorigin>
+<link rel="dns-prefetch" href="https://esm.sh">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* Removed .fonts-loading body opacity trap. Manrope already uses display=swap so the system fallback shows immediately. */
@@ -56,7 +58,25 @@ img{display:block;max-width:100%}
 .hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(245,242,236,.55) 0%,transparent 55%);z-index:1;pointer-events:none}
 /* Animated gradient mesh — soft moving blobs */
 /* Liquid fluid background — independent blobs with SVG distortion */
-.hero-fluid{position:absolute;inset:-60%;width:220%;height:220%;filter:url(#liquid-filter) blur(28px);opacity:.92}
+.hero-fluid{position:absolute;inset:-60%;width:220%;height:220%;filter:url(#liquid-filter) blur(28px);opacity:.92;z-index:0}
+/* WebGL shader canvas — overlays the CSS fluid as a richer fallback-friendly effect */
+.hero-shader{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1;opacity:0;transition:opacity 1.2s ease;border:0;pointer-events:none}
+.hero-shader.ready{opacity:1}
+@media(max-width:900px){.hero-shader{display:none!important}}
+
+/* ═══ BOOT LOADER ═══ */
+.boot{position:fixed;inset:0;z-index:9999;background:#F5F2EC;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
+.boot.hide{opacity:0;visibility:hidden}
+.boot-mark{width:46px;height:46px;background:#0C0C0C;animation:bootMorph 1.6s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes bootMorph{
+  0%{border-radius:6px;transform:rotate(0deg) scale(1)}
+  25%{border-radius:50%;transform:rotate(90deg) scale(.85)}
+  50%{border-radius:6px;transform:rotate(180deg) scale(1)}
+  75%{border-radius:50%;transform:rotate(270deg) scale(.85)}
+  100%{border-radius:6px;transform:rotate(360deg) scale(1)}
+}
+body.booting{overflow:hidden}
+@media(prefers-reduced-motion:reduce){.boot-mark{animation:none}}
 .hero-fluid-blob{position:absolute;border-radius:50%;width:110%;height:110%;will-change:transform}
 .hero-fluid-blob--p1{top:-30%;left:-35%;background:radial-gradient(circle,rgba(255,75,160,.95),transparent 60%);animation:drift1 12s cubic-bezier(.37,0,.63,1) infinite alternate}
 .hero-fluid-blob--o1{top:-30%;right:-35%;background:radial-gradient(circle,rgba(255,130,50,.95),transparent 60%);animation:drift2 15s cubic-bezier(.37,0,.63,1) infinite alternate}
@@ -152,46 +172,58 @@ img{display:block;max-width:100%}
 .testimonial-role{font-size:11px;color:var(--ghost)}
 
 /* ═══ DIFFERENTIATION ═══ */
-.diff{padding:clamp(60px,8vh,100px) var(--gutter);border-top:1px solid var(--border)}
-.diff-inner{max-width:1100px;margin:0 auto}
-.diff-header{text-align:center;margin-bottom:clamp(40px,5vh,56px)}
-.diff-title{font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);font-weight:800;line-height:1.15;margin-bottom:12px}
-.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:768px){.diff-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto;gap:20px}}
-.diff-card{padding:32px 28px;background:var(--surface);border:1px solid var(--border);border-radius:14px;transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
-.diff-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.06)}
-.diff-icon{width:42px;height:42px;border-radius:10px;background:var(--ink);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
-.diff-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8}
-.diff-name{font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
-.diff-desc{font-size:14px;color:var(--muted);line-height:1.7}
+/* Editorial layout — large numbered statements, no cards */
+.diff{padding:clamp(80px,12vh,160px) var(--gutter);border-top:1px solid var(--border)}
+.diff-inner{max-width:920px;margin:0 auto}
+.diff-label{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ghost);margin-bottom:48px;display:block}
+.diff-list{display:flex;flex-direction:column;gap:clamp(40px,6vh,72px)}
+.diff-row{display:grid;grid-template-columns:80px 1fr;gap:clamp(20px,4vw,56px);align-items:baseline}
+@media(max-width:640px){.diff-row{grid-template-columns:48px 1fr;gap:16px}}
+.diff-num{font-family:var(--font-display);font-weight:800;font-size:clamp(40px,5vw,64px);line-height:1;color:var(--ink);font-feature-settings:"tnum"}
+.diff-content{padding-top:clamp(8px,1vw,12px)}
+.diff-headline{font-family:var(--font-display);font-size:clamp(22px,2.6vw,34px);font-weight:800;line-height:1.15;letter-spacing:-.015em;margin-bottom:10px}
+.diff-body{font-size:clamp(14px,1.1vw,16px);color:var(--muted);line-height:1.75;max-width:580px}
 
 /* ═══ TARIFS LINK ═══ */
-.tarifs-link-wrap{padding:clamp(60px,8vh,100px) var(--gutter);text-align:center;border-top:1px solid var(--border)}
-.tarifs-link{display:inline-flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;color:var(--ink);transition:transform .4s var(--ease)}
-.tarifs-link:hover{transform:translateY(-2px)}
-.tarifs-link-label{font-family:var(--font-display);font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-.01em}
-.tarifs-link-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-bottom:3px;border-bottom:1px solid var(--border);transition:color .3s,border-color .3s}
-.tarifs-link:hover .tarifs-link-cta{color:var(--ink);border-color:var(--ink)}
+.tarifs-link-wrap{padding:clamp(80px,12vh,160px) var(--gutter);border-top:1px solid var(--border);background:#EFEBE2}
+.tarifs-link{display:block;max-width:920px;margin:0 auto;text-decoration:none;color:var(--ink);position:relative;padding:clamp(40px,5vw,72px) 0;border-top:1px solid rgba(0,0,0,.12);border-bottom:1px solid rgba(0,0,0,.12)}
+.tarifs-link-label,.tarifs-link-headline,.tarifs-link-cta{will-change:transform;transition:transform .55s var(--ease)}
+.tarifs-link:hover .tarifs-link-label,.tarifs-link:hover .tarifs-link-headline,.tarifs-link:hover .tarifs-link-cta{transform:translateX(24px)}
+.tarifs-link-label{display:block;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ghost);margin-bottom:14px}
+.tarifs-link-headline{display:block;font-family:var(--font-display);font-size:clamp(32px,5vw,68px);font-weight:800;letter-spacing:-.02em;line-height:1;margin-bottom:14px}
+.tarifs-link-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .3s,transform .55s var(--ease)}
+.tarifs-link:hover .tarifs-link-cta{color:var(--ink)}
 .tarifs-link-cta svg{width:14px;height:14px;transition:transform .3s var(--ease)}
-.tarifs-link:hover .tarifs-link-cta svg{transform:translateX(3px)}
+.tarifs-link:hover .tarifs-link-cta svg{transform:translateX(6px)}
+.tarifs-link-arrow{position:absolute;right:0;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-weight:800;font-size:clamp(80px,12vw,160px);line-height:1;color:var(--ink);opacity:.04;transition:opacity .4s var(--ease),transform .4s var(--ease);pointer-events:none}
+.tarifs-link:hover .tarifs-link-arrow{opacity:.08;transform:translateY(-50%) translateX(-12px)}
 
-/* ═══ FAQ ═══ */
-.faq{padding:clamp(80px,10vh,140px) var(--gutter);border-top:1px solid var(--border)}
-.faq-inner{max-width:720px;margin:0 auto}
-.faq-title{font-family:var(--font-display);font-size:clamp(28px,3.5vw,48px);font-weight:800;line-height:1.15;margin-bottom:32px;text-align:center}
-.faq-item{border-bottom:1px solid var(--border);padding:20px 0;cursor:pointer}
-.faq-q{font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.faq-q::after{content:'+';font-size:20px;font-weight:300;color:var(--ghost);transition:transform .3s var(--ease)}
-.faq-item.open .faq-q::after{transform:rotate(45deg)}
-.faq-a{font-size:14px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .5s var(--ease),padding .5s var(--ease);padding-top:0}
-.faq-item.open .faq-a{max-height:200px;padding-top:12px}
+/* ═══ FAQ — editorial layout ═══ */
+.faq{padding:clamp(80px,12vh,160px) var(--gutter);border-top:1px solid var(--border);background:linear-gradient(180deg,var(--bg) 0%,#EFEBE2 100%)}
+.faq-inner{max-width:920px;margin:0 auto}
+.faq-label{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ghost);margin-bottom:16px;display:block}
+.faq-title{font-family:var(--font-display);font-size:clamp(32px,4vw,52px);font-weight:800;line-height:1.1;margin-bottom:clamp(48px,6vh,72px);letter-spacing:-.02em;max-width:680px}
+.faq-list{display:flex;flex-direction:column}
+.faq-item{border-top:1px solid rgba(0,0,0,.12);padding:clamp(24px,3vh,36px) 0;cursor:pointer;display:grid;grid-template-columns:48px 1fr;gap:clamp(16px,3vw,40px);align-items:start;transition:opacity .3s}
+.faq-item:last-child{border-bottom:1px solid rgba(0,0,0,.12)}
+.faq-item:hover{opacity:.7}
+.faq-num{font-family:var(--font-display);font-weight:800;font-size:14px;color:var(--ghost);line-height:1.4;font-feature-settings:"tnum";padding-top:4px}
+.faq-q{font-family:var(--font-display);font-size:clamp(18px,2vw,24px);font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.faq-a{grid-column:2;font-size:15px;color:var(--muted);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .6s var(--ease),padding .5s var(--ease),margin .5s var(--ease);padding-top:0;margin-top:0;max-width:640px}
+.faq-item.open .faq-a{max-height:240px;padding-top:14px;margin-top:4px}
 
-/* ═══ ABOUT ═══ */
-.about{padding:clamp(80px,10vh,140px) var(--gutter);border-top:1px solid var(--border)}
-.about-inner{max-width:680px;margin:0 auto;text-align:center}
-.about-title{font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);font-weight:800;line-height:1.15;margin-bottom:16px}
-.about-bio{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:32px}
-.stack-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+/* ═══ ABOUT — '21' as graphic element ═══ */
+.about{padding:clamp(80px,12vh,160px) var(--gutter);border-top:1px solid var(--border);overflow:hidden}
+.about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,72px);align-items:center}
+@media(max-width:768px){.about-inner{grid-template-columns:1fr;gap:24px;text-align:left}}
+.about-graphic{font-family:var(--font-display);font-weight:800;font-size:clamp(180px,28vw,360px);line-height:.78;letter-spacing:-.05em;color:var(--ink);font-feature-settings:"tnum"}
+@media(max-width:768px){.about-graphic{font-size:clamp(140px,40vw,220px)}}
+.about-content{}
+.about-label{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ghost);margin-bottom:14px;display:block}
+.about-name{font-family:var(--font-display);font-size:clamp(26px,3vw,38px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:18px}
+.about-bio{font-size:clamp(15px,1.2vw,17px);color:var(--secondary);line-height:1.8;margin-bottom:28px;max-width:540px}
+.stack-label{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ghost);margin-bottom:12px;display:block}
+.stack-tags{display:flex;flex-wrap:wrap;gap:8px}
 .stack-tag{font-size:11px;font-weight:500;color:var(--secondary);padding:7px 16px;border:1px solid var(--border);border-radius:99px;transition:border-color .3s,color .3s}
 .stack-tag:hover{border-color:var(--ink);color:var(--ink)}
 
@@ -223,7 +255,14 @@ img{display:block;max-width:100%}
 .offres-link:hover{color:var(--ink)}
 
 /* ═══ CONTACT ═══ */
-.contact{padding:clamp(80px,10vh,140px) var(--gutter);background:var(--ink);color:#fff}
+.contact{padding:clamp(80px,12vh,160px) var(--gutter);background:#1A1815;color:#fff;position:relative}
+.contact::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 0%,rgba(255,80,165,.08),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(255,140,60,.06),transparent 50%);pointer-events:none}
+.contact-inner{position:relative}
+.contact-personal{font-size:13px;color:rgba(255,255,255,.55);margin-top:24px;line-height:1.7;max-width:380px;font-style:italic;border-left:2px solid rgba(255,255,255,.15);padding-left:14px}
+.contact-timeline{display:flex;flex-direction:column;gap:14px;margin:32px 0;max-width:380px}
+.contact-step{display:flex;gap:14px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,.55);line-height:1.5}
+.contact-step-num{font-family:var(--font-display);font-weight:800;font-size:11px;color:#fff;background:rgba(255,255,255,.1);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.contact-step strong{color:rgba(255,255,255,.85);font-weight:600;display:block;margin-bottom:2px}
 .contact-inner{max-width:var(--max-w);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);align-items:start}
 @media(max-width:768px){.contact-inner{grid-template-columns:1fr;gap:40px}}
 .contact-left{}
@@ -320,7 +359,8 @@ img{display:block;max-width:100%}
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"ProfessionalService","name":"Nathan Leray — Création de sites web","url":"https://nathanleray.com","telephone":"+33651068773","email":"contact@nathanleray.com","address":{"@type":"PostalAddress","streetAddress":"9 Place du Maréchal Juin","addressLocality":"Rennes","postalCode":"35000","addressCountry":"FR"},"geo":{"@type":"GeoCoordinates","latitude":48.1090,"longitude":-1.6800},"areaServed":[{"@type":"City","name":"Rennes"},{"@type":"AdministrativeArea","name":"Bretagne"},{"@type":"Country","name":"France"}],"priceRange":"699€ - 1490€+","description":"Création de sites web sur mesure à Rennes. Sites vitrines, boutiques en ligne et projets complexes. Design soigné, responsive, livré clé en main.","founder":{"@type":"Person","name":"Nathan Leray","jobTitle":"Designer & Développeur Web"},"sameAs":["https://instagram.com/nathanleray"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Offres création web","itemListElement":[{"@type":"Offer","name":"Site Vitrine","price":"699","priceCurrency":"EUR","description":"Jusqu'à 5 pages, design personnalisé, responsive, référencé sur Google. Livré en 14 jours."},{"@type":"Offer","name":"Site Sur Mesure","price":"1490","priceCurrency":"EUR","description":"Site complet avec vente en ligne, prise de rendez-vous, référencement avancé. Livré en 3-4 semaines."},{"@type":"Offer","name":"Projet Complexe","description":"Application web, marketplace, espace membre. Développement sur mesure, devis personnalisé."}]}},{"@context":"https://schema.org","@type":"WebSite","name":"Nathan Leray","url":"https://nathanleray.com"}]</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Combien coûte la création d'un site web ?","acceptedAnswer":{"@type":"Answer","text":"Un site vitrine démarre à 699€, un site avec des fonctionnalités avancées à partir de 1 490€. Un devis précis est établi gratuitement après un échange."}},{"@type":"Question","name":"Quel est le délai de livraison ?","acceptedAnswer":{"@type":"Answer","text":"Un site vitrine est livré en 14 jours. Un site sur mesure plus complexe prend généralement 3 à 4 semaines."}},{"@type":"Question","name":"Est-ce que le site sera visible sur mobile ?","acceptedAnswer":{"@type":"Answer","text":"Oui, tous les sites sont 100% responsives et s'adaptent à tous les écrans."}},{"@type":"Question","name":"Est-ce que mon site sera bien référencé sur Google ?","acceptedAnswer":{"@type":"Answer","text":"Oui, chaque site inclut un référencement technique de base. Pour les offres avancées, un travail SEO plus poussé est inclus."}},{"@type":"Question","name":"Que se passe-t-il si le design ne me plaît pas ?","acceptedAnswer":{"@type":"Answer","text":"Je reprends le design gratuitement jusqu'à votre satisfaction."}},{"@type":"Question","name":"Vous travaillez uniquement à Rennes ?","acceptedAnswer":{"@type":"Answer","text":"Je suis basé à Rennes mais je travaille avec des clients dans toute la France."}}]}</script>
 </head>
-<body>
+<body class="booting">
+<div class="boot" id="boot" aria-hidden="true"><div class="boot-mark"></div></div>
 
 <!-- NAV -->
 <nav class="side-nav">
@@ -346,6 +386,7 @@ img{display:block;max-width:100%}
     <div class="hero-fluid-blob hero-fluid-blob--p2"></div>
     <div class="hero-fluid-blob hero-fluid-blob--o2"></div>
   </div>
+  <iframe class="hero-shader" id="heroShader" aria-hidden="true" tabindex="-1" loading="eager" title="" data-src="/shader.html"></iframe>
   <div class="hero-content">
     <p class="hero-tag">Design &amp; D&eacute;veloppement Web</p>
     <h1 class="hero-title">Nathan Leray</h1>
@@ -371,7 +412,7 @@ img{display:block;max-width:100%}
       </a>
       <div class="project-text-col">
         <div class="project-number">01</div>
-        <span class="project-demo">Projet de demonstration</span>
+        <span class="project-demo">Projet de d&eacute;monstration</span>
         <h3 class="project-name">S&egrave;ve Restaurant</h3>
         <p class="project-desc">Site vitrine gastronomique &mdash; design immersif, ambiance sombre et dor&eacute;e.</p>
         <div class="project-tags"><span class="project-tag">HTML/CSS</span><span class="project-tag">JavaScript</span><span class="project-tag">Design</span></div>
@@ -387,7 +428,7 @@ img{display:block;max-width:100%}
       </a>
       <div class="project-text-col">
         <div class="project-number">02</div>
-        <span class="project-demo">Projet de demonstration</span>
+        <span class="project-demo">Projet de d&eacute;monstration</span>
         <h3 class="project-name">Aube Fleurie</h3>
         <p class="project-desc">Studio floral &eacute;v&eacute;nementiel &mdash; esth&eacute;tique organique, vert sauge et vieux rose.</p>
         <div class="project-tags"><span class="project-tag">HTML/CSS</span><span class="project-tag">JavaScript</span><span class="project-tag">Design</span></div>
@@ -403,7 +444,7 @@ img{display:block;max-width:100%}
       </a>
       <div class="project-text-col">
         <div class="project-number">03</div>
-        <span class="project-demo">Projet de demonstration</span>
+        <span class="project-demo">Projet de d&eacute;monstration</span>
         <h3 class="project-name">Studio Orme</h3>
         <p class="project-desc">Studio d'architecture d'int&eacute;rieur &mdash; design &eacute;pur&eacute;, typographie &eacute;ditoriale.</p>
         <div class="project-tags"><span class="project-tag">HTML/CSS</span><span class="project-tag">Design</span><span class="project-tag">Multi-pages</span></div>
@@ -419,25 +460,28 @@ img{display:block;max-width:100%}
 <!-- DIFFERENTIATION -->
 <section class="diff">
   <div class="diff-inner">
-    <div class="diff-header reveal">
-      <p class="section-label">Pourquoi me choisir</p>
-      <h2 class="diff-title">Ce qui me diff&eacute;rencie</h2>
-    </div>
-    <div class="diff-grid">
-      <div class="diff-card reveal">
-        <div class="diff-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-        <div class="diff-name">Vous parlez directement avec moi</div>
-        <div class="diff-desc">Pas de commercial, pas d'interm&eacute;diaire. Vous &eacute;changez avec la personne qui con&ccedil;oit et code votre site, du premier message &agrave; la livraison.</div>
+    <span class="diff-label reveal">Pourquoi travailler avec moi</span>
+    <div class="diff-list">
+      <div class="diff-row reveal">
+        <div class="diff-num">01</div>
+        <div class="diff-content">
+          <h2 class="diff-headline">Vous parlez directement &agrave; la personne qui code votre site.</h2>
+          <p class="diff-body">Pas de commercial, pas de chef de projet, pas d'interm&eacute;diaire. Vos retours arrivent directement &agrave; moi. Vos questions trouvent une r&eacute;ponse pr&eacute;cise. Aucune information ne se perd dans la cha&icirc;ne.</p>
+        </div>
       </div>
-      <div class="diff-card reveal">
-        <div class="diff-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-        <div class="diff-name">Code 100% sur mesure</div>
-        <div class="diff-desc">Pas de WordPress, pas de template, pas de Wix. Chaque ligne de code est &eacute;crite pour votre projet, pour un site unique, rapide et maintenable.</div>
+      <div class="diff-row reveal">
+        <div class="diff-num">02</div>
+        <div class="diff-content">
+          <h2 class="diff-headline">Chaque ligne de code est &eacute;crite pour votre projet.</h2>
+          <p class="diff-body">Pas de WordPress, pas de Wix, pas de th&egrave;me bricol&eacute;. Votre site est cod&eacute; sur mesure, ce qui le rend unique, rapide, et maintenable pendant des ann&eacute;es sans d&eacute;pendre d'une plateforme.</p>
+        </div>
       </div>
-      <div class="diff-card reveal">
-        <div class="diff-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div class="diff-name">Vous &ecirc;tes propri&eacute;taire</div>
-        <div class="diff-desc">Une fois livr&eacute;, le code et le site vous appartiennent. Pas d'abonnement cach&eacute;, pas de d&eacute;pendance, pas de mauvaise surprise.</div>
+      <div class="diff-row reveal">
+        <div class="diff-num">03</div>
+        <div class="diff-content">
+          <h2 class="diff-headline">Une fois livr&eacute;, votre site vous appartient.</h2>
+          <p class="diff-body">Le code source est &agrave; vous. Aucun abonnement cach&eacute;, aucune d&eacute;pendance &agrave; un service tiers, aucune mauvaise surprise dans six mois. Vous &ecirc;tes libre.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -446,7 +490,9 @@ img{display:block;max-width:100%}
 <!-- TARIFS LINK -->
 <div class="tarifs-link-wrap">
   <a href="/offres/" class="tarifs-link reveal">
-    <span class="tarifs-link-label">Vous avez un projet en t&ecirc;te ?</span>
+    <span class="tarifs-link-arrow">&rarr;</span>
+    <span class="tarifs-link-label">Tarifs &amp; collaboration</span>
+    <span class="tarifs-link-headline">Travaillons ensemble.</span>
     <span class="tarifs-link-cta">D&eacute;couvrir mes tarifs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
   </a>
 </div>
@@ -454,31 +500,73 @@ img{display:block;max-width:100%}
 <!-- FAQ -->
 <section class="faq" id="faq">
   <div class="faq-inner">
-    <p class="section-label reveal">Questions fr&eacute;quentes</p>
-    <h2 class="faq-title reveal">Tout savoir sur la cr&eacute;ation de votre site</h2>
-    <div class="faq-item reveal"><div class="faq-q">Combien co&ucirc;te la cr&eacute;ation d'un site web ?</div><div class="faq-a">Un site vitrine d&eacute;marre &agrave; 699&euro;, un site avec des fonctionnalit&eacute;s avanc&eacute;es (vente en ligne, r&eacute;servation) &agrave; partir de 1&nbsp;490&euro;. Un devis pr&eacute;cis est &eacute;tabli gratuitement apr&egrave;s un &eacute;change.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Quel est le d&eacute;lai de livraison ?</div><div class="faq-a">Un site vitrine est livr&eacute; en 14 jours. Un site sur mesure plus complexe prend g&eacute;n&eacute;ralement 3 &agrave; 4 semaines. Le d&eacute;lai exact est d&eacute;fini ensemble avant le d&eacute;but du projet.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Est-ce que le site sera visible sur mobile ?</div><div class="faq-a">Oui, tous les sites sont 100% responsives. Ils s'adaptent parfaitement &agrave; tous les &eacute;crans : t&eacute;l&eacute;phone, tablette et ordinateur.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Est-ce que mon site sera bien r&eacute;f&eacute;renc&eacute; sur Google ?</div><div class="faq-a">Oui, chaque site inclut un r&eacute;f&eacute;rencement technique de base (balises, performance, structure). Pour les offres avanc&eacute;es, un travail SEO plus pouss&eacute; est inclus avec ciblage de mots-cl&eacute;s.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Que se passe-t-il si le design ne me pla&icirc;t pas ?</div><div class="faq-a">Je travaille en &eacute;troite collaboration avec vous tout au long du projet. Si le design ne correspond pas &agrave; vos attentes, je le reprends gratuitement jusqu'&agrave; votre satisfaction.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Vous travaillez uniquement &agrave; Rennes ?</div><div class="faq-a">Je suis bas&eacute; &agrave; Rennes mais je travaille avec des clients dans toute la France. Tout se fait en visio et par &eacute;change num&eacute;rique.</div></div>
+    <span class="faq-label reveal">Questions fr&eacute;quentes</span>
+    <h2 class="faq-title reveal">Les questions qu'on me pose le plus souvent.</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-num">01</div>
+        <div>
+          <div class="faq-q">Combien co&ucirc;te la cr&eacute;ation d'un site web&nbsp;?</div>
+          <div class="faq-a">Un site vitrine d&eacute;marre &agrave; 699&euro;, un site avec des fonctionnalit&eacute;s avanc&eacute;es (vente en ligne, r&eacute;servation) &agrave; partir de 1&nbsp;490&euro;. Un devis pr&eacute;cis est &eacute;tabli gratuitement apr&egrave;s un &eacute;change.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-num">02</div>
+        <div>
+          <div class="faq-q">Quel est le d&eacute;lai de livraison&nbsp;?</div>
+          <div class="faq-a">Un site vitrine est livr&eacute; en 14 jours. Un site sur mesure plus complexe prend g&eacute;n&eacute;ralement 3 &agrave; 4 semaines. Le d&eacute;lai exact est d&eacute;fini ensemble avant le d&eacute;but du projet.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-num">03</div>
+        <div>
+          <div class="faq-q">Est-ce que le site sera visible sur mobile&nbsp;?</div>
+          <div class="faq-a">Oui, tous les sites sont 100% responsives. Ils s'adaptent parfaitement &agrave; tous les &eacute;crans&nbsp;: t&eacute;l&eacute;phone, tablette et ordinateur.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-num">04</div>
+        <div>
+          <div class="faq-q">Mon site sera-t-il bien r&eacute;f&eacute;renc&eacute; sur Google&nbsp;?</div>
+          <div class="faq-a">Oui, chaque site inclut un r&eacute;f&eacute;rencement technique de base (balises, performance, structure). Pour les offres avanc&eacute;es, un travail SEO plus pouss&eacute; est inclus avec ciblage de mots-cl&eacute;s.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-num">05</div>
+        <div>
+          <div class="faq-q">Que se passe-t-il si le design ne me pla&icirc;t pas&nbsp;?</div>
+          <div class="faq-a">Je travaille en &eacute;troite collaboration avec vous tout au long du projet. Si le design ne correspond pas &agrave; vos attentes, je le reprends gratuitement jusqu'&agrave; votre satisfaction.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-num">06</div>
+        <div>
+          <div class="faq-q">Vous travaillez uniquement &agrave; Rennes&nbsp;?</div>
+          <div class="faq-a">Je suis bas&eacute; &agrave; Rennes mais je travaille avec des clients dans toute la France. Tout se fait en visio et par &eacute;change num&eacute;rique.</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ABOUT -->
 <section class="about" id="apropos">
   <div class="about-inner">
-    <p class="section-label reveal">&Agrave; propos</p>
-    <h2 class="about-title reveal">Nathan Leray, 21 ans</h2>
-    <p class="about-bio reveal">Je suis &eacute;tudiant en 3&egrave;me ann&eacute;e d'informatique, passionn&eacute; par le design et le d&eacute;veloppement web depuis toujours. J'adore concevoir des sites qui font prendre vie &agrave; l'imagination des personnes et qui surprennent ceux qui les visitent.</p>
-    <div class="stack-tags reveal">
-      <span class="stack-tag">HTML / CSS</span>
-      <span class="stack-tag">JavaScript</span>
-      <span class="stack-tag">React</span>
-      <span class="stack-tag">Figma</span>
-      <span class="stack-tag">GSAP</span>
-      <span class="stack-tag">Responsive</span>
-      <span class="stack-tag">Performance</span>
+    <div class="about-graphic reveal">21</div>
+    <div class="about-content">
+      <span class="about-label reveal">&Agrave; propos</span>
+      <h2 class="about-name reveal">Nathan Leray, &eacute;tudiant en informatique &amp; passionn&eacute; de design web.</h2>
+      <p class="about-bio reveal">Je suis en 3&egrave;me ann&eacute;e d'informatique. Le code et le design me passionnent depuis toujours. Ce qui m'anime&nbsp;: concevoir des sites qui font prendre vie &agrave; l'imagination des gens et surprennent ceux qui les visitent.</p>
+      <span class="stack-label reveal">Mes outils</span>
+      <div class="stack-tags reveal">
+        <span class="stack-tag">HTML / CSS</span>
+        <span class="stack-tag">JavaScript</span>
+        <span class="stack-tag">React</span>
+        <span class="stack-tag">Figma</span>
+        <span class="stack-tag">GSAP</span>
+        <span class="stack-tag">Responsive</span>
+        <span class="stack-tag">Performance</span>
+      </div>
     </div>
   </div>
 </section>
@@ -488,13 +576,16 @@ img{display:block;max-width:100%}
   <div class="contact-inner">
     <div class="contact-left">
       <p class="section-label reveal" style="color:rgba(255,255,255,.25)">Contact</p>
-      <h2 class="contact-title reveal">Un projet en t&ecirc;te ? Parlons-en</h2>
-      <p class="contact-sub reveal">Une id&eacute;e, un besoin, une question ? &Eacute;crivez-moi. Je r&eacute;ponds sous 24h.</p>
+      <h2 class="contact-title reveal">Un projet en t&ecirc;te&nbsp;? Parlons-en.</h2>
+      <p class="contact-sub reveal">&Eacute;crivez-moi. Je lis chaque message personnellement et je r&eacute;ponds sous 24h.</p>
+      <div class="contact-timeline reveal">
+        <div class="contact-step"><span class="contact-step-num">1</span><span><strong>Vous m'&eacute;crivez</strong>D&eacute;crivez-moi votre projet en quelques mots.</span></div>
+        <div class="contact-step"><span class="contact-step-num">2</span><span><strong>Je vous r&eacute;ponds sous 24h</strong>Avec un retour honn&ecirc;te et des premi&egrave;res pistes.</span></div>
+        <div class="contact-step"><span class="contact-step-num">3</span><span><strong>On prend rendez-vous</strong>Un appel d&eacute;couverte gratuit pour discuter ensemble.</span></div>
+      </div>
       <a href="mailto:contact@nathanleray.com" class="contact-email reveal">contact@nathanleray.com</a>
       <a href="tel:+33651068773" class="contact-email reveal" style="display:block;margin-top:8px">06 51 06 87 73</a>
       <div class="contact-socials reveal">
-        <a href="https://github.com/nathanleray" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://linkedin.com/in/nathanleray" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="https://instagram.com/nathanleray" target="_blank" rel="noopener noreferrer">Instagram</a>
       </div>
     </div>
@@ -581,7 +672,7 @@ function openModal(i) {
   const tags = p.tags.map(t => `<span class="modal-tag">${t}</span>`).join('');
   modalBody.innerHTML = `
     <h2 class="modal-title">${p.name}</h2>
-    ${p.demo ? '<span class="modal-demo">Projet de demonstration</span>' : ''}
+    ${p.demo ? '<span class="modal-demo">Projet de d&eacute;monstration</span>' : ''}
     <div class="modal-meta">
       <div><div class="modal-meta-label">Role</div><div class="modal-meta-value">${c.role}</div></div>
       <div><div class="modal-meta-label">Annee</div><div class="modal-meta-value">${c.year}</div></div>
@@ -719,6 +810,31 @@ if (window.innerWidth > 900) {
   window.addEventListener('scroll', updateNavStyle, { passive: true });
   updateNavStyle();
 }
+</script>
+<script>
+(()=>{
+  const iframe=document.getElementById("heroShader");
+  const boot=document.getElementById("boot");
+  const hero=iframe&&iframe.parentElement;
+  let loaded=false,domReady=false;
+  function hideBoot(){if(loaded&&domReady){document.body.classList.remove("booting");boot.classList.add("hide");iframe.classList.add("ready")}}
+  // Lazy attach iframe src after DOM ready to avoid blocking critical render
+  const isMobile=window.matchMedia('(max-width:900px)').matches;
+  function attach(){if(!iframe)return;if(isMobile){loaded=true;return}if(!iframe.src){iframe.src=iframe.dataset.src}}
+  if(iframe){
+    iframe.addEventListener("load",()=>{loaded=true;hideBoot()});
+    // Failsafe: hide loader after 6s no matter what
+    setTimeout(()=>{loaded=true;domReady=true;hideBoot()},6000);
+  } else {loaded=true}
+  if(document.readyState==="complete"||document.readyState==="interactive"){domReady=true;attach();hideBoot()}
+  else{document.addEventListener("DOMContentLoaded",()=>{domReady=true;attach();hideBoot()})}
+  // Pause CSS-only when hero out of viewport (no src swap = no reinit flash)
+  if(iframe&&"IntersectionObserver" in window){
+    new IntersectionObserver(es=>{
+      iframe.style.contentVisibility=es[0].isIntersecting?'visible':'hidden';
+    },{threshold:0,rootMargin:"200px"}).observe(hero);
+  }
+})();
 </script>
 </body>
 </html>

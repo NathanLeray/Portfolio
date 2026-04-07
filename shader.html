@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title></title>
+<link rel="preconnect" href="https://esm.sh" crossorigin>
+<style>
+html,body{margin:0;padding:0;background:transparent;overflow:hidden;width:100%;height:100%}
+#root,canvas{position:fixed;inset:0;width:100vw!important;height:100vh!important;display:block}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<pre id="err" style="position:fixed;inset:0;color:#fff;background:#000;padding:20px;font:12px monospace;white-space:pre-wrap;z-index:9999;display:none"></pre>
+<script>window.addEventListener('error',e=>{const x=document.getElementById('err');x.style.display='block';x.textContent='ERR: '+e.message+'\n'+(e.filename||'')+':'+(e.lineno||'')});window.addEventListener('unhandledrejection',e=>{const x=document.getElementById('err');x.style.display='block';x.textContent='REJ: '+(e.reason&&e.reason.message||e.reason)})</script>
+<script type="module">
+import React from 'https://esm.sh/react@18.3.1';
+import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
+import { ShaderGradientCanvas, ShaderGradient } from 'https://esm.sh/@shadergradient/react@2.0.23?deps=react@18.3.1,react-dom@18.3.1,@react-three/fiber@8.17.10,three@0.161.0';
+
+const props = {
+  animate:'on', type:'waterPlane',
+  color1:'#FF3D82', color2:'#FF6B35', color3:'#5B6BFF',
+  bgColor1:'#000000', bgColor2:'#000000',
+  brightness:1.2,
+  cAzimuthAngle:170, cDistance:4.4, cPolarAngle:70, cameraZoom:1, fov:45,
+  positionX:0, positionY:0.9, positionZ:-0.3,
+  rotationX:45, rotationY:0, rotationZ:0,
+  uAmplitude:0, uDensity:1.2, uFrequency:0, uSpeed:0.2, uStrength:3.4, uTime:0,
+  envPreset:'city', lightType:'3d', reflection:0.1, grain:'off',
+  shader:'defaults', wireframe:false,
+  pixelDensity:1, frameRate:10
+};
+
+const App = () => React.createElement(
+  ShaderGradientCanvas,
+  { style:{position:'fixed',inset:0,width:'100%',height:'100%'}, pixelDensity:1, fov:45, pointerEvents:'none' },
+  React.createElement(ShaderGradient, props)
+);
+
+createRoot(document.getElementById('root')).render(React.createElement(App));
+
+// Notify parent when ready
+window.addEventListener('load',()=>{parent && parent.postMessage('shader-ready','*')});
+</script>
+</body>
+</html>
